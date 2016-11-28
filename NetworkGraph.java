@@ -3,7 +3,10 @@
  */
 package assignment13;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * <p>This class represents a graph of flights and airports along with specific
@@ -23,7 +26,8 @@ import java.io.FileNotFoundException;
  * @author CS2420 Teaching Staff - Spring 2016
  */
 public class NetworkGraph {
-
+	String flightInfoPath;
+	ArrayList<Airport> airports;
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
 	 * contained in the given file. See the sample files or a randomly generated
@@ -45,7 +49,10 @@ public class NetworkGraph {
 	public NetworkGraph(String flightInfoPath) throws FileNotFoundException {
 		//TODO: Implement a constructor that reads in the file and stores the information
 		// 		appropriately in this object.
-	}
+			this.flightInfoPath = flightInfoPath;
+			populate(flightInfoPath);
+			//make scann with split at ','. then convert this to Strin[] and at the differetn elements to flight class
+	}		
 
 	/**
 	 * This method returns a BestPath object containing information about the best
@@ -97,5 +104,24 @@ public class NetworkGraph {
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria, String airliner) {
 		//TODO:
 		return null;
+	}
+	public void populate(String flightInfo){
+		File f = new File(flightInfo);
+		try {
+			Scanner s = new Scanner(f);
+			while (s.hasNext()){
+				String currentLine = s.nextLine();
+				String[] currentLineArray = currentLine.split(",");//check ENUMS somewhere and add to correct airport
+				ArrayList<Flight> flights = new ArrayList<Flight>();
+				Airport dst = new Airport(currentLineArray[0], flights); //TODO dis null doe..
+				Flight thisFlight = new Flight(dst, currentLineArray[1], Integer.parseInt(currentLineArray[2]), Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Double.parseDouble(currentLineArray[6]));
+				flights.add(thisFlight);
+			}
+			Airport fd = new Airport();//switch? adding to correct airport.....
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block    System.out.println....?
+			e.printStackTrace();
+		}
 	}
 }
