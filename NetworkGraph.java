@@ -32,7 +32,8 @@ public class NetworkGraph {
 	String flightInfoPath;
 	ArrayList<Airport> airports;
 	NetworkGraph g;
-	LinkedHashMap lhm;
+	LinkedHashMap<Airport, Flight> lhm;
+
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
 	 * contained in the given file. See the sample files or a randomly generated
@@ -119,15 +120,14 @@ public class NetworkGraph {
 				String currentLine = s.nextLine();
 				String[] currentLineArray = currentLine.split(",");//check ENUMS somewhere and add to correct airport
 				ArrayList<Flight> flights = new ArrayList<Flight>();
-				//LinkedHashMap<Airport, Flight> flights = new LinkedHashMap<Airport, Flight>();
+				//LinkedHashMap flights = new LinkedHashMap();
 				Airport origin = new Airport(currentLineArray[0], flights);
 				Airport dst = new Airport(currentLineArray[1], flights); //TODO dis null doe..
 				Flight thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
 				flights.add(thisFlight);
-	//			Airport fd = new Airport();//switch? adding to correct airport.....
-
+				lhm.put(origin, thisFlight);     //TODO     AYO WATCHU THINKING MAH NIGGA KYLE?
+												//TODO AYO fo YAYO, must we checkish if same origin, or might all mighty java do dis fo us
 			}
-	//		Graph gr = new Graph
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block    System.out.println....?
 			e.printStackTrace();
