@@ -5,7 +5,10 @@ package assignment13;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -32,7 +35,10 @@ public class NetworkGraph {
 	String flightInfoPath;
 	ArrayList<Airport> airports;
 	NetworkGraph g;
-	LinkedHashMap<Airport, Flight> lhm;
+	HashMap<String, Flight> flights;
+
+	
+	int currentSize = 0;
 
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
@@ -56,6 +62,7 @@ public class NetworkGraph {
 		//TODO: Implement a constructor that reads in the file and stores the information
 		// 		appropriately in this object.
 			this.flightInfoPath = flightInfoPath;
+			currentSize=0;
 			populate(flightInfoPath);
 			
 			//make scann with split at ','. then convert this to Strin[] and at the differetn elements to flight class
@@ -114,31 +121,90 @@ public class NetworkGraph {
 	}
 	public void populate(String flightInfo){
 		File f = new File(flightInfo);
+		String currentLine;
+		String[] currentLineArray;
+		Airport origin;
+		Airport dst;
+		Flight thisFlight;
+		flights = new HashMap();
+		airports = new ArrayList(350);
+		//ArrayList<Flight> flights = new ArrayList<Flight>();
+
+		//int index =0;
+
 		try {
 			Scanner s = new Scanner(f);
+			System.out.println(s.nextLine());
 			while (s.hasNextLine()){
-				String currentLine = s.nextLine();
-				String[] currentLineArray = currentLine.split(",");//check ENUMS somewhere and add to correct airport
-				ArrayList<Flight> flights = new ArrayList<Flight>();
-				//LinkedHashMap flights = new LinkedHashMap();
-				Airport origin = new Airport(currentLineArray[0], flights);
-				Airport dst = new Airport(currentLineArray[1], flights); //TODO dis null doe..
-				Flight thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
-				flights.add(thisFlight);
-				lhm.put(origin, thisFlight);     //TODO     AYO WATCHU THINKING MAH NIGGA KYLE?
-												//TODO AYO fo YAYO, must we checkish if same origin, or might all mighty java do dis fo us
+				 currentLine = s.nextLine();
+				 currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+
+				System.out.println(currentLine.toString());
+				
+				origin = new Airport(currentLineArray[0]);
+				dst = new Airport(currentLineArray[1]); //TODO dis null doe..
+				thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
+							//if (lhm.containsKey(thisFlight))
+				if (!airports.contains(origin)){
+					airports.add(origin);
+				}
+				if (flights.containsValue(thisFlight)){
+					//if flight exists, add value of new flight so values can be averaged.
+					flights.get(origin.name).count++;
+					flights.get(origin.name).carriers.add(thisFlight.carrier);
+					flights.get(origin.name).delay+=thisFlight.delay;
+					flights.get(origin.name).canceled+=thisFlight.canceled;
+					flights.get(origin.name).time+=thisFlight.time;
+					flights.get(origin.name).cost+=thisFlight.cost;
+					flights.get(origin.name).distance+=thisFlight.distance;
+					
+				}
+				else{
+					flights.put(origin.name, thisFlight);
+				}
+
+				
+				//TODO at end, divide by count for each Flight
+				
 			}
+			//generateDotFile(flightInfo);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block    System.out.println....?
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	/**
+	 * Generates a DOT file for visualizing the binary heap.
+	 */
+//	public void generateDotFile(String filename) {
+//		try (PrintWriter out = new PrintWriter(filename)) {
+//			out.println("digraph Heap {\n\tnode [shape=record]\n");
+//
+//			for (int i = 0; i < currentSize; i++) {
+//				out.println("\tnode" + i + " [label = \"<f0> |<f1> " + airports.get(i).getDestinations() + "|<f2> \"]");
+//				if (((i * 2) + 1) < currentSize)
+//					out.println("\tnode" + i + ":f0 -> node" + ((i * 2) + 1) + ":f1");
+//				if (((i * 2) + 2) < currentSize)
+//					out.println("\tnode" + i + ":f2 -> node" + ((i * 2) + 2) + ":f1");
+//			}
+//			out.println("}");
+//		} catch (IOException e) {
+//			System.out.println(e);
+//		}
+//	}
+	
+	
+	
+	
 	public static void main(String[] args) throws FileNotFoundException{
-		File b = new File("C:/Users/pat/Desktop/Fall16/2420/assignment12/dog.txt");
-		Scanner p = new Scanner(b);
-		String cu = p.nextLine();
+		//File b = new File("C:/Users/pat/Desktop/test.csv");
+		NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
+		//g.populate("C:/Users/pat/Desktop/test.csv");
 
-		System.out.println(cu);
+		//System.out.println(cu);
 	}
 	
 }
