@@ -1,4 +1,4 @@
-/**
+ /**
  * 
  */
 package assignment13;
@@ -6,6 +6,7 @@ package assignment13;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -111,10 +112,11 @@ public class NetworkGraph {
 		File f = new File(flightInfo);
 		try {
 			Scanner s = new Scanner(f);
-			while (s.hasNext()){
+			while (s.hasNextLine()){
 				String currentLine = s.nextLine();
 				String[] currentLineArray = currentLine.split(",");//check ENUMS somewhere and add to correct airport
-				ArrayList<Flight> flights = new ArrayList<Flight>();
+	//			ArrayList<Flight> flights = new ArrayList<Flight>();
+				HashMap<Flight> flights = new HashMap<Flight>();
 				Airport origin = new Airport(currentLineArray[0], flights);
 				Airport dst = new Airport(currentLineArray[1], flights); //TODO dis null doe..
 				Flight thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
