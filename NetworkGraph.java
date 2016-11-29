@@ -6,7 +6,10 @@ package assignment13;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
+
+
 
 /**
  * <p>This class represents a graph of flights and airports along with specific
@@ -29,6 +32,7 @@ public class NetworkGraph {
 	String flightInfoPath;
 	ArrayList<Airport> airports;
 	NetworkGraph g;
+	LinkedHashMap lhm;
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
 	 * contained in the given file. See the sample files or a randomly generated
@@ -111,10 +115,11 @@ public class NetworkGraph {
 		File f = new File(flightInfo);
 		try {
 			Scanner s = new Scanner(f);
-			while (s.hasNext()){
+			while (s.hasNextLine()){
 				String currentLine = s.nextLine();
 				String[] currentLineArray = currentLine.split(",");//check ENUMS somewhere and add to correct airport
 				ArrayList<Flight> flights = new ArrayList<Flight>();
+				//LinkedHashMap<Airport, Flight> flights = new LinkedHashMap<Airport, Flight>();
 				Airport origin = new Airport(currentLineArray[0], flights);
 				Airport dst = new Airport(currentLineArray[1], flights); //TODO dis null doe..
 				Flight thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
