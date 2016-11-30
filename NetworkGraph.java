@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 
@@ -33,10 +34,11 @@ import java.util.Scanner;
  */
 public class NetworkGraph {
 	String flightInfoPath;
-	ArrayList<Airport> airports;
+	ArrayList<Flight> flights;
 	NetworkGraph g;
-	HashMap<String, Flight> flights;
-
+	HashMap<String, Airport> airports;
+	int tempI;
+	double weight;
 	
 	int currentSize = 0;
 
@@ -65,7 +67,6 @@ public class NetworkGraph {
 			currentSize=0;
 			populate(flightInfoPath);
 			
-			//make scann with split at ','. then convert this to Strin[] and at the differetn elements to flight class
 	}		
 
 	/**
@@ -93,6 +94,9 @@ public class NetworkGraph {
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
 		//TODO: First figure out what kind of path you need to get (HINT: Use a switch!) then
 		//		Search for the shortest path using Dijkstra's algorithm.
+		
+		weight = this.getWeight(criteria); 
+		
 		return null;
 	}
 	
@@ -126,8 +130,8 @@ public class NetworkGraph {
 		Airport origin;
 		Airport dst;
 		Flight thisFlight;
-		flights = new HashMap();
-		airports = new ArrayList(350);
+		airports = new HashMap();
+//		flights = new ArrayList(350);
 		//ArrayList<Flight> flights = new ArrayList<Flight>();
 
 		//int index =0;
@@ -142,31 +146,42 @@ public class NetworkGraph {
 				System.out.println(currentLine.toString());
 				
 				origin = new Airport(currentLineArray[0]);
-				dst = new Airport(currentLineArray[1]); //TODO dis null doe..
+				dst = new Airport(currentLineArray[1]);
 				thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
 							//if (lhm.containsKey(thisFlight))
-				if (!airports.contains(origin)){
-					airports.add(origin);
+				if (!airports.containsKey(origin.name)){
+					airports.remove(origin.name, origin);
 				}
-				if (flights.containsValue(thisFlight)){
-					//if flight exists, add value of new flight so values can be averaged.
-					flights.get(origin.name).count++;
-					flights.get(origin.name).carriers.add(thisFlight.carrier);
-					flights.get(origin.name).delay+=thisFlight.delay;
-					flights.get(origin.name).canceled+=thisFlight.canceled;
-					flights.get(origin.name).time+=thisFlight.time;
-					flights.get(origin.name).cost+=thisFlight.cost;
-					flights.get(origin.name).distance+=thisFlight.distance;
+				//check if origin -> destination already exits.
+				if (airports.get(origin.name).flights.contains(thisFlight)){
+															//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
 					
+					//if flight exists, add value of new flight so values can be averaged.	
+				tempI = airports.get(origin.name).flights.indexOf(thisFlight);
+					
+				Flight tempeFlight = airports.get(origin.name).flights.get(tempI);
+				
+				tempeFlight.canceled=(((tempeFlight.canceled * tempeFlight.count) + thisFlight.canceled) / tempeFlight.count + 1);
+				tempeFlight.time=(((tempeFlight.time * tempeFlight.count) + thisFlight.time) / tempeFlight.count + 1);
+
+				//airports.get(origin.name).flights.get(tempI).carriers.add(thisFlight.carrier);	
+   // ineffient //airports.get(origin.name).flights.get(tempI).canceled =(((airports.get(origin.name).flights.get(tempI).canceled * airports.get(origin.name).flights.get(tempI).count) + thisFlight.canceled) / airports.get(origin.name).flights.get(tempI).count + 1);
+				//airports.get(origin.name).flights.get(tempI).time =(((airports.get(origin.name).flights.get(tempI).time * airports.get(origin.name).flights.get(tempI).count ) + thisFlight.time) / airports.get(origin.name).flights.get(tempI).count + 1);	
+					
+					//flights.get(origin.name).canceled+=thisFlight.canceled;
+					//flights.get(origin.name).time+=thisFlight.time;
+					//flights.get(origin.name).cost+=thisFlight.cost;
+					//flights.get(origin.name).distance+=thisFlight.distance;
+					//flights.get(origin.name).count++;
 				}
 				else{
-					flights.put(origin.name, thisFlight);
+					airports.get(origin.name).flights.add(thisFlight);
+					//or tempeFLight...and set that spot to tempe?
 				}
-
-				
-				//TODO at end, divide by count for each Flight
 				
 			}
+			
+			
 			//generateDotFile(flightInfo);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block    System.out.println....?
@@ -196,7 +211,17 @@ public class NetworkGraph {
 //		}
 //	}
 	
-	
+	public FlightCriteria getWeight(FlightCriteria criteria){
+		double result = 0;
+		switch (criteria){
+		case DELAY:
+			return FlightCriteria.DELAY;
+		
+		case CANCELED:
+			return FlightCriteria.CANCELED; 
+			
+		}
+	}	
 	
 	
 	public static void main(String[] args) throws FileNotFoundException{
