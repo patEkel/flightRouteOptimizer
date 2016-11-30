@@ -149,7 +149,7 @@ public class NetworkGraph {
 			thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]),
 					Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]),
 					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
-			//if (lhm.containsKey(thisFlight))
+			
 			if (!airports.containsKey(origin.name)) {
 				airports.remove(origin.name, origin);
 			}
@@ -162,19 +162,12 @@ public class NetworkGraph {
 
 				Flight tempFlight = airports.get(origin.name).flights.get(tempI);
 
-				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
-						/ tempFlight.count + 1);
+				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)	/ tempFlight.count + 1);
 				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / tempFlight.count + 1);
+				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / tempFlight.count + 1);
+				tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance) / tempFlight.count + 1);
+				tempFlight.count++;
 
-				//airports.get(origin.name).flights.get(tempI).carriers.add(thisFlight.carrier);	
-				// ineffient //airports.get(origin.name).flights.get(tempI).canceled =(((airports.get(origin.name).flights.get(tempI).canceled * airports.get(origin.name).flights.get(tempI).count) + thisFlight.canceled) / airports.get(origin.name).flights.get(tempI).count + 1);
-				//airports.get(origin.name).flights.get(tempI).time =(((airports.get(origin.name).flights.get(tempI).time * airports.get(origin.name).flights.get(tempI).count ) + thisFlight.time) / airports.get(origin.name).flights.get(tempI).count + 1);	
-
-				//flights.get(origin.name).canceled+=thisFlight.canceled;
-				//flights.get(origin.name).time+=thisFlight.time;
-				//flights.get(origin.name).cost+=thisFlight.cost;
-				//flights.get(origin.name).distance+=thisFlight.distance;
-				//flights.get(origin.name).count++;
 			} else {
 				airports.get(origin.name).flights.add(thisFlight);
 				//or tempeFLight...and set that spot to tempe?
