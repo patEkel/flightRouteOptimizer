@@ -13,8 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-
-
 /**
  * <p>This class represents a graph of flights and airports along with specific
  * data about those flights. It is recommended to create an airport class and a
@@ -39,7 +37,7 @@ public class NetworkGraph {
 	HashMap<String, Airport> airports;
 	int tempI;
 	double weight;
-	
+
 	int currentSize = 0;
 
 	/**
@@ -63,11 +61,11 @@ public class NetworkGraph {
 	public NetworkGraph(String flightInfoPath) throws FileNotFoundException {
 		//TODO: Implement a constructor that reads in the file and stores the information
 		// 		appropriately in this object.
-			this.flightInfoPath = flightInfoPath;
-			currentSize=0;
-			populate(flightInfoPath);
-			
-	}		
+		this.flightInfoPath = flightInfoPath;
+		currentSize = 0;
+		populate(flightInfoPath);
+
+	}
 
 	/**
 	 * This method returns a BestPath object containing information about the best
@@ -94,12 +92,12 @@ public class NetworkGraph {
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
 		//TODO: First figure out what kind of path you need to get (HINT: Use a switch!) then
 		//		Search for the shortest path using Dijkstra's algorithm.
-		
-		weight = this.getWeight(criteria); 
-		
+
+		FlightCriteria crit = this.getWeight(criteria);
+
 		return null;
 	}
-	
+
 	/**
 	 * <p>This overloaded method should do the same as the one above only when looking for paths
 	 * skip the ones that don't match the given airliner.</p>
@@ -123,7 +121,8 @@ public class NetworkGraph {
 		//TODO:
 		return null;
 	}
-	public void populate(String flightInfo){
+
+	public void populate(String flightInfo) throws FileNotFoundException {
 		File f = new File(flightInfo);
 		String currentLine;
 		String[] currentLineArray;
@@ -131,105 +130,100 @@ public class NetworkGraph {
 		Airport dst;
 		Flight thisFlight;
 		airports = new HashMap();
-//		flights = new ArrayList(350);
+		//		flights = new ArrayList(350);
 		//ArrayList<Flight> flights = new ArrayList<Flight>();
 
 		//int index =0;
 
-		try {
-			Scanner s = new Scanner(f);
-			System.out.println(s.nextLine());
-			while (s.hasNextLine()){
-				 currentLine = s.nextLine();
-				 currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+		Scanner s = new Scanner(f);
+		System.out.println(s.nextLine());
 
-				System.out.println(currentLine.toString());
-				
-				origin = new Airport(currentLineArray[0]);
-				dst = new Airport(currentLineArray[1]);
-				thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]), Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]), Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
-							//if (lhm.containsKey(thisFlight))
-				if (!airports.containsKey(origin.name)){
-					airports.remove(origin.name, origin);
-				}
-				//check if origin -> destination already exits.
-				if (airports.get(origin.name).flights.contains(thisFlight)){
-															//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
-					
-					//if flight exists, add value of new flight so values can be averaged.	
+		while (s.hasNextLine()) {
+			currentLine = s.nextLine();
+			currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+
+			System.out.println(currentLine.toString());
+
+			origin = new Airport(currentLineArray[0]);
+			dst = new Airport(currentLineArray[1]);
+			thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]),
+					Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]),
+					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
+			//if (lhm.containsKey(thisFlight))
+			if (!airports.containsKey(origin.name)) {
+				airports.remove(origin.name, origin);
+			}
+			//check if origin -> destination already exits.
+			if (airports.get(origin.name).flights.contains(thisFlight)) {
+				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
+
+				//if flight exists, add value of new flight so values can be averaged.	
 				tempI = airports.get(origin.name).flights.indexOf(thisFlight);
-					
-				Flight tempeFlight = airports.get(origin.name).flights.get(tempI);
-				
-				tempeFlight.canceled=(((tempeFlight.canceled * tempeFlight.count) + thisFlight.canceled) / tempeFlight.count + 1);
-				tempeFlight.time=(((tempeFlight.time * tempeFlight.count) + thisFlight.time) / tempeFlight.count + 1);
+
+				Flight tempFlight = airports.get(origin.name).flights.get(tempI);
+
+				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
+						/ tempFlight.count + 1);
+				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / tempFlight.count + 1);
 
 				//airports.get(origin.name).flights.get(tempI).carriers.add(thisFlight.carrier);	
-   // ineffient //airports.get(origin.name).flights.get(tempI).canceled =(((airports.get(origin.name).flights.get(tempI).canceled * airports.get(origin.name).flights.get(tempI).count) + thisFlight.canceled) / airports.get(origin.name).flights.get(tempI).count + 1);
+				// ineffient //airports.get(origin.name).flights.get(tempI).canceled =(((airports.get(origin.name).flights.get(tempI).canceled * airports.get(origin.name).flights.get(tempI).count) + thisFlight.canceled) / airports.get(origin.name).flights.get(tempI).count + 1);
 				//airports.get(origin.name).flights.get(tempI).time =(((airports.get(origin.name).flights.get(tempI).time * airports.get(origin.name).flights.get(tempI).count ) + thisFlight.time) / airports.get(origin.name).flights.get(tempI).count + 1);	
-					
-					//flights.get(origin.name).canceled+=thisFlight.canceled;
-					//flights.get(origin.name).time+=thisFlight.time;
-					//flights.get(origin.name).cost+=thisFlight.cost;
-					//flights.get(origin.name).distance+=thisFlight.distance;
-					//flights.get(origin.name).count++;
-				}
-				else{
-					airports.get(origin.name).flights.add(thisFlight);
-					//or tempeFLight...and set that spot to tempe?
-				}
-				
+
+				//flights.get(origin.name).canceled+=thisFlight.canceled;
+				//flights.get(origin.name).time+=thisFlight.time;
+				//flights.get(origin.name).cost+=thisFlight.cost;
+				//flights.get(origin.name).distance+=thisFlight.distance;
+				//flights.get(origin.name).count++;
+			} else {
+				airports.get(origin.name).flights.add(thisFlight);
+				//or tempeFLight...and set that spot to tempe?
 			}
-			
-			
-			//generateDotFile(flightInfo);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block    System.out.println....?
-			e.printStackTrace();
+
 		}
 	}
-	
-	
-	
+
 	/**
 	 * Generates a DOT file for visualizing the binary heap.
 	 */
-//	public void generateDotFile(String filename) {
-//		try (PrintWriter out = new PrintWriter(filename)) {
-//			out.println("digraph Heap {\n\tnode [shape=record]\n");
-//
-//			for (int i = 0; i < currentSize; i++) {
-//				out.println("\tnode" + i + " [label = \"<f0> |<f1> " + airports.get(i).getDestinations() + "|<f2> \"]");
-//				if (((i * 2) + 1) < currentSize)
-//					out.println("\tnode" + i + ":f0 -> node" + ((i * 2) + 1) + ":f1");
-//				if (((i * 2) + 2) < currentSize)
-//					out.println("\tnode" + i + ":f2 -> node" + ((i * 2) + 2) + ":f1");
-//			}
-//			out.println("}");
-//		} catch (IOException e) {
-//			System.out.println(e);
-//		}
-//	}
-	
-	public FlightCriteria getWeight(FlightCriteria criteria){
-		double result = 0;
-		switch (criteria){
+	//	public void generateDotFile(String filename) {
+	//		try (PrintWriter out = new PrintWriter(filename)) {
+	//			out.println("digraph Heap {\n\tnode [shape=record]\n");
+	//
+	//			for (int i = 0; i < currentSize; i++) {
+	//				out.println("\tnode" + i + " [label = \"<f0> |<f1> " + airports.get(i).getDestinations() + "|<f2> \"]");
+	//				if (((i * 2) + 1) < currentSize)
+	//					out.println("\tnode" + i + ":f0 -> node" + ((i * 2) + 1) + ":f1");
+	//				if (((i * 2) + 2) < currentSize)
+	//					out.println("\tnode" + i + ":f2 -> node" + ((i * 2) + 2) + ":f1");
+	//			}
+	//			out.println("}");
+	//		} catch (IOException e) {
+	//			System.out.println(e);
+	//		}
+	//	}
+
+	public FlightCriteria getWeight(FlightCriteria criteria) {
+		switch (criteria) {
 		case DELAY:
 			return FlightCriteria.DELAY;
-		
 		case CANCELED:
-			return FlightCriteria.CANCELED; 
-			
+			return FlightCriteria.CANCELED;
+		case COST:
+			return FlightCriteria.COST;
+		case DISTANCE:
+			return FlightCriteria.DISTANCE;
+		default:
+			return FlightCriteria.TIME;
 		}
-	}	
-	
-	
-	public static void main(String[] args) throws FileNotFoundException{
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
 		//File b = new File("C:/Users/pat/Desktop/test.csv");
 		NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 		//g.populate("C:/Users/pat/Desktop/test.csv");
 
 		//System.out.println(cu);
 	}
-	
+
 }
