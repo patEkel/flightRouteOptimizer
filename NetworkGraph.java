@@ -225,7 +225,7 @@ public class NetworkGraph {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		//File b = new File("C:/Users/pat/Desktop/test.csv");
-		NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
+	//	NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 		//g.populate("C:/Users/pat/Desktop/test.csv");
 
 		//System.out.println(cu);
