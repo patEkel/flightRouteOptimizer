@@ -151,10 +151,10 @@ public class NetworkGraph {
 					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
 			
 			if (!airports.containsKey(origin.name)) {
-				airports.remove(origin.name, origin);
+				airports.remove(origin.name, origin); // shouldn't this be add? 
 			}
 			//check if origin -> destination already exits.
-			if (airports.get(origin.name).flights.contains(thisFlight)) {
+			if (airports.get(origin.name).flights.contains(thisFlight)) { // this flight is too unique. need to just check destination
 				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
 
 				//if flight exists, add value of new flight so values can be averaged.	
