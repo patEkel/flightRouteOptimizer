@@ -151,11 +151,12 @@ public class NetworkGraph {
 					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
 			
 			if (!airports.containsKey(origin.name)) {
-				airports.remove(origin.name, origin);
+				airports.put(origin.name, origin);
 			}
 			//check if origin -> destination already exits.
-			if (airports.get(origin.name).flights.contains(thisFlight)) {
+			if (checkIfFlightExists(origin, thisFlight)) {
 				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
+
 
 				//if flight exists, add value of new flight so values can be averaged.	
 				tempI = airports.get(origin.name).flights.indexOf(thisFlight);
@@ -165,6 +166,7 @@ public class NetworkGraph {
 				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)	/ tempFlight.count + 1);
 				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / tempFlight.count + 1);
 				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / tempFlight.count + 1);
+				tempFlight.delay= (((tempFlight.delay* tempFlight.count) + thisFlight.delay) / tempFlight.count + 1);
 				tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance) / tempFlight.count + 1);
 				tempFlight.count++;
 
@@ -172,8 +174,15 @@ public class NetworkGraph {
 				airports.get(origin.name).flights.add(thisFlight);
 				//or tempeFLight...and set that spot to tempe?
 			}
-
 		}
+	}
+	public Boolean checkIfFlightExists(Airport airport, Flight dst){
+		for (Flight f : airport.flights){
+			if (f.flightName.equals(dst.flightName)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
