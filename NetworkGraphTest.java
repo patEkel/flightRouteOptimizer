@@ -16,6 +16,7 @@ public class NetworkGraphTest {
 	@Before
 	public void setUp() throws Exception {
 		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+		System.out.println("bitch");
 
 	}
 
@@ -25,7 +26,7 @@ public class NetworkGraphTest {
 
 	@Test
 	public void test() throws FileNotFoundException {
-		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+//		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
 
 	}
 
