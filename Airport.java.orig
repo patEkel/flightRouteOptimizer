@@ -6,22 +6,26 @@ public class Airport {
 	String name;
 	ArrayList<Flight> flights;
 	double currentBest;
-
-	public Airport(String airport, ArrayList<Flight> flights) {
+	
+<<<<<<< HEAD
+	public Airport(String airport, ArrayList<Flight> flights){
 		this.name = airport;
 		this.flights = flights;
 		this.currentBest = Double.POSITIVE_INFINITY;
 	}
-
-	//	public Airport(String airport, ArrayList<Flight> flights){
-	//		this.name = airport;
-	//		this.flights = flights;
-	//		this.currentBest = Double.POSITIVE_INFINITY;
-	//	}
-	public Airport(String airport) {
+	
+}
+=======
+//	public Airport(String airport, ArrayList<Flight> flights){
+//		this.name = airport;
+//		this.flights = flights;
+//		this.currentBest = Double.POSITIVE_INFINITY;
+//	}
+	public Airport(String airport){
 		this.name = airport;
 		this.flights = new ArrayList<Flight>(350);
 		this.currentBest = Double.POSITIVE_INFINITY;
-
 	}
+
 }
+>>>>>>> 28eb91400450f1ad64138c3208fc7d5f7356b1e8
