@@ -140,7 +140,11 @@ public class NetworkGraph {
 
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
+<<<<<<< HEAD
 			currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+=======
+			currentLineArray = currentLine.split("\t"); //check ENUMS somewhere and add to correct airport
+>>>>>>> d77657f5d704f78df2527fec0dc07c70d56cbd5e
 
 			System.out.println(currentLine.toString());
 
@@ -152,16 +156,22 @@ public class NetworkGraph {
 			
 			if (!airports.containsKey(origin.name)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 				airports.remove(origin.name, origin); // shouldn't this be add? 
 			}
 			//check if origin -> destination already exits.
 			if (airports.get(origin.name).flights.contains(thisFlight)) { // this flight is too unique. need to just check destination
 =======
+=======
+>>>>>>> d77657f5d704f78df2527fec0dc07c70d56cbd5e
 				airports.put(origin.name, origin);
 			}
 			//check if origin -> destination already exits.
 			if (checkIfFlightExists(origin, thisFlight)) {
+<<<<<<< HEAD
 >>>>>>> 28eb91400450f1ad64138c3208fc7d5f7356b1e8
+=======
+>>>>>>> d77657f5d704f78df2527fec0dc07c70d56cbd5e
 				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
 
 
@@ -234,5 +244,8 @@ public class NetworkGraph {
 
 		//System.out.println(cu);
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d77657f5d704f78df2527fec0dc07c70d56cbd5e
 }

@@ -140,7 +140,7 @@ public class NetworkGraph {
 
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
-			currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+			currentLineArray = currentLine.split("\t"); //check ENUMS somewhere and add to correct airport
 
 			System.out.println(currentLine.toString());
 
@@ -230,5 +230,4 @@ public class NetworkGraph {
 
 		//System.out.println(cu);
 	}
-
 }
