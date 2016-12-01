@@ -140,9 +140,10 @@ public class NetworkGraph {
 
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
-			currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
+			currentLineArray = currentLine.split("/t"); //check ENUMS somewhere and add to correct airport
 
-			System.out.println(currentLine.toString());
+			System.out.println(currentLine);
+
 
 			origin = new Airport(currentLineArray[0]);
 			dst = new Airport(currentLineArray[1]);
