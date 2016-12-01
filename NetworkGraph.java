@@ -6,11 +6,8 @@ package assignment13;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -141,11 +138,9 @@ public class NetworkGraph {
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
 
-			currentLineArray = currentLine.split("/t"); //check ENUMS somewhere and add to correct airport
+			currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
 
-			System.out.println(currentLine);
-
-			currentLineArray = currentLine.split("\t"); //check ENUMS somewhere and add to correct airport
+			System.out.println(currentLine.toString());
 
 
 
@@ -228,11 +223,11 @@ public class NetworkGraph {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	//public static void main(String[] args) throws FileNotFoundException {
 		//File b = new File("C:/Users/pat/Desktop/test.csv");
 	//	NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 		//g.populate("C:/Users/pat/Desktop/test.csv");
 
 		//System.out.println(cu);
-	}
+	//}
 }

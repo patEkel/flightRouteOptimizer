@@ -15,7 +15,7 @@ public class NetworkGraphTest {
 
 	@Before
 	public void setUp() throws Exception {
-		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+		NetworkGraph ng = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 
 	}
 
@@ -25,7 +25,7 @@ public class NetworkGraphTest {
 
 	@Test
 	public void test() throws FileNotFoundException {
-		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+		assertTrue(ng.airports.get("SFO").flights.size()==1);
 
 	}
 
