@@ -29,13 +29,11 @@ import java.util.Scanner;
  */
 public class NetworkGraph {
 	String flightInfoPath;
-	//ArrayList<Flight> flights;
 	NetworkGraph g;
 	HashMap<String, Airport> airports;
 	int tempI;
 	double weight;
-
-	int currentSize = 0;
+	int currentSize = 0; //delete???
 
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
@@ -89,11 +87,21 @@ public class NetworkGraph {
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
 		//TODO: First figure out what kind of path you need to get (HINT: Use a switch!) then
 		//		Search for the shortest path using Dijkstra's algorithm.
-
-		FlightCriteria crit = this.getWeight(criteria);
-
-		return null;
+		String crit = getWeightType(criteria);
+		
+		
+		//BestPath bestPath = dik();
+		
+		//double ballsInKylesMouth = g.airports.get("SFO").flights.get(0).Double.parseDouble(crit);
+			return null;
+			//return bestPath;
 	}
+	
+	//public ArrayList<String> dik(){
+		// initialing the "currentBest" for each airport...?
+		// do we break shit if we do that upon creating graph...? it owuld be super ineffient to have to re-make the grpah..
+	//}
+	 
 
 	/**
 	 * <p>This overloaded method should do the same as the one above only when looking for paths
@@ -126,7 +134,7 @@ public class NetworkGraph {
 		Airport origin;
 		Airport dst;
 		Flight thisFlight;
-		airports = new HashMap();
+		airports = new HashMap<String, Airport>();
 
 		Scanner s = new Scanner(f);
 		System.out.println(s.nextLine());
@@ -213,21 +221,51 @@ public class NetworkGraph {
 	//		}
 	//	}
 
-	public FlightCriteria getWeight(FlightCriteria criteria) {
+//	public FlightCriteria getWeight(FlightCriteria criteria) {
+//		switch (criteria) {
+//		case DELAY:
+//			return FlightCriteria.DELAY;
+//		case CANCELED:
+//			return FlightCriteria.CANCELED;
+//		case COST:
+//			return FlightCriteria.COST;
+//		case DISTANCE:
+//			return FlightCriteria.DISTANCE;
+//		default:
+//			return FlightCriteria.TIME;
+//		}
+//	}
+
+	public String getWeightType(FlightCriteria criteria) {
 		switch (criteria) {
 		case DELAY:
-			return FlightCriteria.DELAY;
+			return "delay";
 		case CANCELED:
-			return FlightCriteria.CANCELED;
+			return "canceled";
 		case COST:
-			return FlightCriteria.COST;
+			return "cost";
 		case DISTANCE:
-			return FlightCriteria.DISTANCE;
+			return "distance";
 		default:
-			return FlightCriteria.TIME;
+			return "time";
 		}
 	}
-
+	
+	public double getWeightValue(Flight flight, String criteria){
+		switch (criteria) {
+		case "delay":
+			return flight.delay;
+		case "canceled":
+			return flight.canceled;
+		case "cost":
+			return flight.cost;
+		case "distance":
+			return flight.distance;
+		default:
+			return flight.time;
+		}	
+	}
+	
 	//public static void main(String[] args) throws FileNotFoundException {
 		//File b = new File("C:/Users/pat/Desktop/test.csv");
 	//	NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");

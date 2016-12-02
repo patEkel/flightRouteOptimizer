@@ -16,10 +16,14 @@ public class NetworkGraphTest {
 	@Before
 	public void setUp() throws Exception {
 
+
 		 j = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 
 //		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
 		System.out.println("bitch");
+
+		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+		System.out.println("sup");
 
 
 	}
