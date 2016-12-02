@@ -160,12 +160,12 @@ public class NetworkGraph {
 
 				Flight tempFlight = airports.get(origin.name).flights.get(flightIndex);
 
-				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled) / (tempFlight.count + 1));
-				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1));
-				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / (tempFlight.count + 1));
-				tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1));
+				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled) / (tempFlight.count + 1.0));
+				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1.0));
+				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / (tempFlight.count + 1.0));
+				tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1.0));
 				tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)
-						/ (tempFlight.count + 1));
+						/ (tempFlight.count + 1.0));
 				tempFlight.count++;
 
 			} else {
