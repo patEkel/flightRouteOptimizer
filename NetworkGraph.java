@@ -151,13 +151,14 @@ public class NetworkGraph {
 			}
 			//check if origin -> destination already exits
 			//check if origin -> destination already exits.
-			if (checkIfFlightExists(origin.name, thisFlight)) {
+			int flightIndex = checkFlightsIndex(origin.name, thisFlight);
+			if (flightIndex >= 0) { 
 				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
 
 				//if flight exists, add value of new flight so values can be averaged.	
-				tempI = checkFlightsIndex(origin.name, thisFlight);
+//				tempI = checkFlightsIndex(origin.name, thisFlight);
 
-				Flight tempFlight = airports.get(origin.name).flights.get(tempI);
+				Flight tempFlight = airports.get(origin.name).flights.get(flightIndex);
 
 				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled) / (tempFlight.count + 1));
 				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1));
@@ -174,7 +175,7 @@ public class NetworkGraph {
 		}
 	}
 
-	public int checkFlightsIndex(String origin, Flight dst) {
+	public int checkFlightsIndex(String origin, Flight dst) { // combine these two so doesn't have to be duplicated
 		for (int i = 0; i < airports.get(origin).flights.size(); i++) {
 		if (airports.get(origin).flights.get(i).flightName.equals(dst.flightName)) {
 				return i;
@@ -183,14 +184,14 @@ public class NetworkGraph {
 		return -1;
 	}
 
-	public Boolean checkIfFlightExists(String origin, Flight dst) {
-		for (Flight f : airports.get(origin).flights) {
-			if (f.flightName.equals(dst.flightName)) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	public Boolean checkIfFlightExists(String origin, Flight dst) {
+//		for (Flight f : airports.get(origin).flights) {
+//			if (f.flightName.equals(dst.flightName)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Generates a DOT file for visualizing the binary heap.
