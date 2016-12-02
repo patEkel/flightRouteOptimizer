@@ -6,10 +6,10 @@ import java.util.LinkedList;
 public class Flight {
 	Airport destination;
 	String carrier;
-	int delay = 0;
-	int canceled = 0;
-	int time = 0;
-	int distance = 0;
+	double delay = 0;
+	double canceled = 0;
+	double time = 0;
+	double distance = 0;
 	double cost = 0;
 	int count = 0;
 	String flightName;

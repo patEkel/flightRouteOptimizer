@@ -29,7 +29,7 @@ import java.util.Scanner;
  */
 public class NetworkGraph {
 	String flightInfoPath;
-	ArrayList<Flight> flights;
+	//ArrayList<Flight> flights;
 	NetworkGraph g;
 	HashMap<String, Airport> airports;
 	int tempI;
@@ -127,10 +127,6 @@ public class NetworkGraph {
 		Airport dst;
 		Flight thisFlight;
 		airports = new HashMap();
-		//		flights = new ArrayList(350);
-		//ArrayList<Flight> flights = new ArrayList<Flight>();
-
-		//int index =0;
 
 		Scanner s = new Scanner(f);
 		System.out.println(s.nextLine());
@@ -155,32 +151,40 @@ public class NetworkGraph {
 			}
 			//check if origin -> destination already exits
 			//check if origin -> destination already exits.
-			if (checkIfFlightExists(origin, thisFlight)) {
+			if (checkIfFlightExists(origin.name, thisFlight)) {
 				//TODO changed airports to hashmap, each airport has a list of flights, and each flight has a set of airliners
 
 				//if flight exists, add value of new flight so values can be averaged.	
-				tempI = airports.get(origin.name).flights.indexOf(thisFlight);
+				tempI = checkFlightsIndex(origin.name, thisFlight);
 
 				Flight tempFlight = airports.get(origin.name).flights.get(tempI);
 
-				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
-						/ tempFlight.count + 1);
-				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / tempFlight.count + 1);
-				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / tempFlight.count + 1);
-				tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / tempFlight.count + 1);
+				tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled) / (tempFlight.count + 1));
+				tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1));
+				tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / (tempFlight.count + 1));
+				tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1));
 				tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)
-						/ tempFlight.count + 1);
+						/ (tempFlight.count + 1));
 				tempFlight.count++;
 
 			} else {
-				airports.get(origin.name).flights.add(thisFlight);
+				(airports.get(origin.name)).flights.add(thisFlight);
 				//or tempeFLight...and set that spot to tempe?
 			}
 		}
 	}
 
-	public Boolean checkIfFlightExists(Airport airport, Flight dst) {
-		for (Flight f : airport.flights) {
+	public int checkFlightsIndex(String origin, Flight dst) {
+		for (int i = 0; i < airports.get(origin).flights.size(); i++) {
+		if (airports.get(origin).flights.get(i).flightName.equals(dst.flightName)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public Boolean checkIfFlightExists(String origin, Flight dst) {
+		for (Flight f : airports.get(origin).flights) {
 			if (f.flightName.equals(dst.flightName)) {
 				return true;
 			}
@@ -230,4 +234,13 @@ public class NetworkGraph {
 
 		//System.out.println(cu);
 	//}
+
+	//	public static void main(String[] args) throws FileNotFoundException {
+	//		//File b = new File("C:/Users/pat/Desktop/test.csv");
+	//	//	NetworkGraph g = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
+	//		//g.populate("C:/Users/pat/Desktop/test.csv");
+	//
+	//		//System.out.println(cu);
+	//	}
+
 }
