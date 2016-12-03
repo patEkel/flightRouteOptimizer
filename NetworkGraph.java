@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 /**
@@ -88,13 +89,23 @@ public class NetworkGraph {
 		//TODO: First figure out what kind of path you need to get (HINT: Use a switch!) then
 		//		Search for the shortest path using Dijkstra's algorithm.
 		String crit = getWeightType(criteria);
+		AirportComparator comp = new AirportComparator();
+		PriorityQueue<Airport> pq = new PriorityQueue<Airport>(300, comp);
 		
-		
+		pq.add(airports.get(origin));
+		Airport airport;
+		while(!pq.isEmpty()){
+			airport = pq.poll();
+			if (airport.name.equals(destination)){
+				break;
+			}
+			//
+		}
 		//BestPath bestPath = dik();
 		
 		//double ballsInKylesMouth = g.airports.get("SFO").flights.get(0).Double.parseDouble(crit);
 			return null;
-			//return bestPath;
+		//return bestPath;
 	}
 	
 	//public ArrayList<String> dik(){

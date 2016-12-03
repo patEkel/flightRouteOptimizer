@@ -22,7 +22,7 @@ public class NetworkGraphTest {
 //		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
 		System.out.println("bitch");
 
-		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
+	//	NetworkGraph ng = new NetworkGraph("smallFlights.csv");
 		System.out.println("sup");
 
 
