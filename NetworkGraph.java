@@ -35,7 +35,8 @@ public class NetworkGraph {
 	int tempI;
 	double weight;
 	int currentSize = 0; //delete???
-
+	ArrayList<Airport> totalAirports;
+	
 	/**
 	 * <p>Constructs a NetworkGraph object and populates it with the information
 	 * contained in the given file. See the sample files or a randomly generated
@@ -59,7 +60,9 @@ public class NetworkGraph {
 		// 		appropriately in this object.
 		this.flightInfoPath = flightInfoPath;
 		currentSize = 0;
+		totalAirports = new ArrayList<Airport>();
 		populate(flightInfoPath);
+		
 
 	}
 
@@ -167,6 +170,7 @@ public class NetworkGraph {
 
 			if (!airports.containsKey(origin.name)) {
 				airports.put(origin.name, origin); // shouldn't this be add? 
+				totalAirports.add(origin);
 			}
 			//check if origin -> destination already exits
 			//check if origin -> destination already exits.
