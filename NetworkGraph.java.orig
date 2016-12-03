@@ -98,9 +98,54 @@ import java.util.Scanner;
 
 		}
 
+		/**
+		 * This method returns a BestPath object containing information about the best
+		 * way to fly to the destination from the origin. "Best" is defined by the
+		 * FlightCriteria parameter <code>enum</code>. This method should throw no
+		 * exceptions and simply return a BestPath object with information dictating
+		 * the result. If a destination or origin is not contained in
+		 * this instance of NetworkGraph simply return a BestPath object with no path (not a
+		 * <code>null</code> path). If origin or destination are <code>null</code>, also
+		 * return a BestPath object with no path.
+		 * 
+		 * @param origin - The starting location to find a path from. This should be a
+		 * 3 character long string denoting an airport.
+		 * 
+		 * @param destination - The destination location from the starting airport.
+		 * Again, this should be a 3 character long string denoting an airport.
+		 * 
+		 * @param criteria - This enum dictates the definition of "best". Based on this
+		 * value a path should be generated and return.
+		 * 
+		 * @return - An object containing path information including origin, destination,
+		 * and everything in between.
+		 */
+		public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
+			String crit = getWeightType(criteria);
+			AirportComparator comp = new AirportComparator();
 
+			PriorityQueue<Airport> pq = new PriorityQueue<Airport>(50, comp);
 
-		//public ArrayList<String> dik()
+			pq.add(airports.get(origin));
+
+			Airport airport;
+			while (!pq.isEmpty()) {
+				airport = pq.poll();
+				if (airport.name.equals(destination)) {
+					break;
+				}
+				//	for ()
+			}
+
+			//BestPath bestPath = dik();
+
+<<<<<<< HEAD
+			return null;
+			//return bestPath;
+		}
+
+		//public ArrayList<String> dik(){
+=======
 	/**
 	 * This method returns a BestPath object containing information about the best
 	 * way to fly to the destination from the origin. "Best" is defined by the
@@ -146,7 +191,8 @@ import java.util.Scanner;
 		//return bestPath;
 	}
 	
-	//public ArrayList<String> dik()s
+	//public ArrayList<String> dik(){
+>>>>>>> bd8a0b87c63179884b6042998e5c2f114774ac98
 		// initialing the "currentBest" for each airport...?
 		// do we break shit if we do that upon creating graph...? it owuld be super ineffient to have to re-make the grpah..
 		//}
