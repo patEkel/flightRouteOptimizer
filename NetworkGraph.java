@@ -187,7 +187,7 @@ import java.util.Scanner;
 			while (s.hasNextLine()) {
 				currentLine = s.nextLine();
 
-				currentLineArray = currentLine.split("\t"); //check ENUMS somewhere and add to correct airport
+				currentLineArray = currentLine.split(","); //check ENUMS somewhere and add to correct airport
 
 				System.out.println(currentLine.toString());
 
