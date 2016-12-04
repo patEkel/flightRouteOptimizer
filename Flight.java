@@ -1,7 +1,6 @@
 package assignment13;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 
 public class Flight {
 	Airport destination;
@@ -15,19 +14,16 @@ public class Flight {
 	String flightName;
 	HashSet<String> carriers = new HashSet<String>();
 
-	//FlightCriteria flightCriteria;
-	
-	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, double cost){
-	//public Flight(Airport destination,  int delay, int canceled, int time, int distance, double cost){
-	this.destination = destination;
+	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, double cost) {
+		this.destination = destination;
 		this.carriers.add(carrier);
 		this.carrier = carrier; // add in Graph class every time, no duplicates
 		this.delay = (double) delay;
 		this.canceled = (double) canceled;
 		this.time = (double) time;
 		this.distance = (double) distance;
-		this.count=1;
+		this.count = 1;
 		this.flightName = destination.name;
-	}	
-	
+	}
+
 }

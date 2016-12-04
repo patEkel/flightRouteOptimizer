@@ -5,7 +5,6 @@ package assignment13;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -71,7 +70,6 @@ public class NetworkGraph {
 	 *             only if a file is not found.
 	 */
 	public NetworkGraph(String flightInfoPath) throws FileNotFoundException {
-		// TODO: Implement a constructor that reads in the file and stores the  information appropriately in this object.
 		this.flightInfoPath = flightInfoPath;
 		currentSize = 0;
 		totalAirports = new ArrayList<Airport>();
@@ -115,22 +113,16 @@ public class NetworkGraph {
 			bestPath.pathLength = 0;
 			return bestPath;
 		}
-		if (!airports.containsKey(origin) || !airports.containsKey(destination)) { // or statement?
-												 // TODO - what if there's  an airport with no flights?
-			bestPath.pathLength = 0; // TODO - ^^ items aren't added to airports if they're just a destination
+		if (!airports.containsKey(origin) || !airports.containsKey(destination)) {
+			bestPath.pathLength = 0;
 			return bestPath;
 		}
-		// TODO: First figure out what kind of path you need to get (HINT: Use a
-		// switch!) then
-		// Search for the shortest path using Dijkstra's algorithm.
 		String crit = getWeightType(criteria);
 		AirportComparator comp = new AirportComparator();
 		PriorityQueue<Airport> pq = new PriorityQueue<Airport>(350, comp);
 
 		pq.add(airports.get(origin));
 		airports.get(origin).currentBest = 0;
-		// Airport currentAirport = new Airport("dum", new ArrayList<Flight>());
-		// // TODO - could this cause an issue?
 
 		while (!pq.isEmpty()) {
 			currentAirport = pq.poll();
@@ -139,36 +131,16 @@ public class NetworkGraph {
 				break;
 			}
 			airports.get(currentAirport.name).wasVisited = true;
-			currentAirport.wasVisited = true; // ?? here
+			currentAirport.wasVisited = true;
 
 			for (Flight f : currentAirport.flights) {
 				if (airlineGiven) {
 					if (f.carriers.contains(airline)) {
-						if (!airports.get(f.destination.name).wasVisited) {
-							if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest
-									+ this.getWeightValue(f, crit))) {
-								pq.remove(airports.get(f.destination.name));
-								airports.get(f.destination.name).currentBest = currentAirport.currentBest
-										+ this.getWeightValue(f, crit);
-								pq.add(airports.get(f.destination.name));
-								airports.get(f.destination.name).cameFrom = currentAirport;
-
-							}
-						}
+						this.checkNeighbors(f, currentAirport, crit, pq);
 					}
 
 				} else {
-					if (!airports.get(f.destination.name).wasVisited) {
-						if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest
-								+ this.getWeightValue(f, crit))) {
-							pq.remove(airports.get(f.destination.name));
-							airports.get(f.destination.name).currentBest = currentAirport.currentBest
-									+ this.getWeightValue(f, crit);
-							pq.add(airports.get(f.destination.name));
-							airports.get(f.destination.name).cameFrom = currentAirport;
-
-						}
-					}
+					this.checkNeighbors(f, currentAirport, crit, pq);
 				}
 			}
 		}
@@ -186,6 +158,20 @@ public class NetworkGraph {
 		airlineGiven = false;
 		airline = null;
 		return bestPath;
+	}
+
+	public void checkNeighbors(Flight f, Airport currentAirport, String crit, PriorityQueue<Airport> pq) {
+		if (!airports.get(f.destination.name).wasVisited) {
+			if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest
+					+ this.getWeightValue(f, crit))) {
+				pq.remove(airports.get(f.destination.name));
+				airports.get(f.destination.name).currentBest = currentAirport.currentBest
+						+ this.getWeightValue(f, crit);
+				pq.add(airports.get(f.destination.name));
+				airports.get(f.destination.name).cameFrom = currentAirport;
+
+			}
+		}
 	}
 
 	public void resetGraph() {
@@ -236,14 +222,11 @@ public class NetworkGraph {
 		Airport dst;
 		Flight thisFlight;
 		airports = new HashMap<String, Airport>();
-
 		Scanner s = new Scanner(f);
-		// System.out.println(s.nextLine());
-
 		currentLine = s.nextLine();
+
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
-
 			currentLineArray = currentLine.split(","); // check ENUMS somewhere and add to correct airport
 
 			origin = new Airport(currentLineArray[0]);
@@ -253,11 +236,11 @@ public class NetworkGraph {
 					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
 
 			if (!airports.containsKey(origin.name)) {
-				airports.put(origin.name, origin); // shouldn't this be add?
+				airports.put(origin.name, origin);
 				totalAirports.add(origin);
 			}
 			if (!airports.containsKey(dst.name)) {
-				airports.put(dst.name, dst); // shouldn't this be add?
+				airports.put(dst.name, dst);
 				totalAirports.add(dst);
 			}
 			// check if origin -> destination already exits.
@@ -267,27 +250,7 @@ public class NetworkGraph {
 				// if flight exists, add value of new flight so values can be averaged.
 				Flight tempFlight = airports.get(origin.name).flights.get(flightIndex);
 				tempFlight.carriers.add(thisFlight.carrier);
-
-				if (thisFlight.canceled != -1.0) {
-					tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
-							/ (tempFlight.count + 1.0));
-				}
-				if (thisFlight.time != -1.0) {
-					tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time)
-							/ (tempFlight.count + 1.0));
-				}
-				if (thisFlight.cost != -1.0) {
-					tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost)
-							/ (tempFlight.count + 1.0));
-				}
-				if (thisFlight.delay != -1.0) {
-					tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay)
-							/ (tempFlight.count + 1.0));
-				}
-				if (thisFlight.distance != -1.0) {
-					tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)
-							/ (tempFlight.count + 1.0));
-				}
+				this.averageValues(tempFlight, thisFlight);
 				tempFlight.count++;
 
 			} else {
@@ -296,7 +259,27 @@ public class NetworkGraph {
 		}
 	}
 
-	public int checkFlightsIndex(String origin, Flight dst) { // combine these two so doesn't have to be duplicated
+	public void averageValues(Flight tempFlight, Flight thisFlight) {
+		if (thisFlight.canceled != -1.0) {
+			tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
+					/ (tempFlight.count + 1.0));
+		}
+		if (thisFlight.time != -1.0) {
+			tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1.0));
+		}
+		if (thisFlight.cost != -1.0) {
+			tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / (tempFlight.count + 1.0));
+		}
+		if (thisFlight.delay != -1.0) {
+			tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1.0));
+		}
+		if (thisFlight.distance != -1.0) {
+			tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)
+					/ (tempFlight.count + 1.0));
+		}
+	}
+
+	public int checkFlightsIndex(String origin, Flight dst) {
 		for (int i = 0; i < airports.get(origin).flights.size(); i++) {
 			if (airports.get(origin).flights.get(i).flightName.equals(dst.flightName)) {
 				return i;
@@ -334,5 +317,4 @@ public class NetworkGraph {
 			return flight.time;
 		}
 	}
-
 }
