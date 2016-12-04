@@ -26,7 +26,6 @@ public class Flight {
 		this.canceled = (double) canceled;
 		this.time = (double) time;
 		this.distance = (double) distance;
-		this.cost = cost;
 		this.count=1;
 		this.flightName = destination.name;
 	}	

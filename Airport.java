@@ -34,6 +34,5 @@ public class Airport {
 		return cameFrom;
 	}
 	public void setCameFrom(Airport a) {
-		this.cameFrom = a;
 	}
 }
