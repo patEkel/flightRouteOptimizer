@@ -12,7 +12,7 @@ public class FindBestPathTester {
 	public static void main(String[] args) {
 		NetworkGraph airportGraph = null;
 		try {
-			airportGraph = new NetworkGraph("flights-2015-q3.csv");
+			airportGraph = new NetworkGraph("C:/Users/pat/Desktop/school/Fall16/2420/assignment13/flights-2015-q3.csv");
 //			airportGraph = new NetworkGraph("C:/Users/pat/Desktop/test.csv");
 		} catch (Exception e) {
 			e.printStackTrace();
