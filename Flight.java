@@ -17,7 +17,7 @@ public class Flight {
 
 	//FlightCriteria flightCriteria;
 	
-	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, int cost){
+	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, double cost){
 	//public Flight(Airport destination,  int delay, int canceled, int time, int distance, double cost){
 	this.destination = destination;
 		this.carriers.add(carrier);
@@ -26,7 +26,7 @@ public class Flight {
 		this.canceled = (double) canceled;
 		this.time = (double) time;
 		this.distance = (double) distance;
-		this.cost = (double) cost;
+		this.cost = cost;
 		this.count=1;
 		this.flightName = destination.name;
 	}	
