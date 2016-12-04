@@ -42,6 +42,7 @@ public class NetworkGraph {
 	double weight;
 	int currentSize = 0; // delete???
 	ArrayList<Airport> totalAirports;
+	BestPath bestPath;
 
 	/**
 	 * <p>
@@ -75,6 +76,7 @@ public class NetworkGraph {
 		currentSize = 0;
 		totalAirports = new ArrayList<Airport>();
 		populate(flightInfoPath);
+		System.out.println("The file was succesfully read in");
 
 	}
 
@@ -104,14 +106,17 @@ public class NetworkGraph {
 	 *         destination, and everything in between.
 	 */
 	public BestPath getBestPath(String origin, String destination, FlightCriteria criteria) {
-		BestPath bestPath = new BestPath();
+		bestPath = new BestPath();
+		bestPath.path = new ArrayList<String>();
+		Airport currentAirport = airports.get(origin);
+
 		if (origin == null || destination == null) {
 			bestPath.pathLength = 0;
 			return bestPath;
 			//			bestPath.toString(); ??????
 		}
-		if (airports.containsKey(origin) || airports.containsKey(destination)) { // TODO - what if there's an airport with no flights?
-			bestPath.pathLength = 0;
+		if (!airports.containsKey(origin)){ // || !airports.containsKey(destination)) { // TODO - what if there's an airport with no flights?
+			bestPath.pathLength = 0; // TODO - ^^ items aren't addded to airports if they're just a destination 
 			return bestPath;
 		}
 		// TODO: First figure out what kind of path you need to get (HINT: Use a
@@ -119,31 +124,45 @@ public class NetworkGraph {
 		// Search for the shortest path using Dijkstra's algorithm.
 		String crit = getWeightType(criteria);
 		AirportComparator comp = new AirportComparator();
-		PriorityQueue<Airport> pq = new PriorityQueue<Airport>(300, comp);
+		PriorityQueue<Airport> pq = new PriorityQueue<Airport>(350, comp);
 
 		pq.add(airports.get(origin));
-		Airport currentAirport = new Airport("dum", new ArrayList<Flight>()); // TODO - could this cause an issue?
+		airports.get(origin).currentBest = 0;
+//		Airport currentAirport = new Airport("dum", new ArrayList<Flight>()); // TODO - could this cause an issue?
+	
 		while (!pq.isEmpty()) {
-			currentAirport = pq.poll(); // TODO - do we need to keep a count for each enum value? otherwise the avg is off
-			currentAirport.wasVisited = true; // ?? here
+			 currentAirport = pq.poll(); // TODO - do we need to keep a count for each enum value? otherwise the avg is off
+			
+			
 			if (currentAirport.name.equals(destination)) {
 				break;
 			}
+			airports.get(currentAirport.name).wasVisited = true;
+			currentAirport.wasVisited = true; // ?? here
+			
 			for (Flight f : currentAirport.flights) {
-				if (!f.destination.wasVisited) {
-					f.destination.setCameFrom(currentAirport);
-					if (f.destination.currentBest > (currentAirport.currentBest + this.getWeightValue(f, crit))) {
-						pq.add(f.destination);
-						f.destination.currentBest = currentAirport.currentBest + this.getWeightValue(f, crit);
+				if (!airports.get(f.destination.name).wasVisited) {
+					if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest + this.getWeightValue(f, crit))) {
+							pq.remove(airports.get(f.destination.name));
+							airports.get(f.destination.name).currentBest = currentAirport.currentBest + this.getWeightValue(f, crit);
+							pq.add(airports.get(f.destination.name));
+							airports.get(f.destination.name).cameFrom = currentAirport;
+						
 					}
+
+//					f.destination.setCameFrom(currentAirport);
+//					airports.get(f.destination.name).cameFrom = currentAirport;
+//					f.destination.cameFrom = currentAirport;
 				}
 			}
 		}
+		bestPath.pathLength = currentAirport.currentBest;
 		while (currentAirport.cameFrom != null) {
-			bestPath.path.add(currentAirport.name);
+			bestPath.path.add(0, currentAirport.name);
 			currentAirport = currentAirport.cameFrom;
+			
 		}
-		bestPath.pathLength = bestPath.path.size();
+		bestPath.path.add(0, currentAirport.name);
 		this.resetGraph();
 		return bestPath;
 
@@ -204,9 +223,9 @@ public class NetworkGraph {
 		airports = new HashMap<String, Airport>();
 
 		Scanner s = new Scanner(f);
-		//System.out.println(s.nextLine());
+		// System.out.println(s.nextLine());
 
-		currentLine=s.nextLine();
+		currentLine = s.nextLine();
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
 
@@ -214,7 +233,7 @@ public class NetworkGraph {
 														// and add to correct
 														// airport
 
-		//	System.out.println(currentLine.toString());
+			// System.out.println(currentLine.toString());
 
 			origin = new Airport(currentLineArray[0]);
 			dst = new Airport(currentLineArray[1]);
@@ -225,6 +244,10 @@ public class NetworkGraph {
 			if (!airports.containsKey(origin.name)) {
 				airports.put(origin.name, origin); // shouldn't this be add?
 				totalAirports.add(origin);
+			}
+			if (!airports.containsKey(dst.name)) {
+				airports.put(dst.name, dst); // shouldn't this be add?
+				totalAirports.add(dst);
 			}
 			// check if origin -> destination already exits
 			// check if origin -> destination already exits.
@@ -267,17 +290,18 @@ public class NetworkGraph {
 			}
 		}
 	}
-	//	public String findMissingValue(Flight flight, double time, double canceled, double cost, double delay, double distance) {
-	//		if (flight.time == -1.0) { // TODO - does this work? 
-	//			return "time";
-	//		}
-	//		if (flight.canceled == -1.0) {
-	//			return "cancelled
-	//		}
-	//	}
+	// public String findMissingValue(Flight flight, double time, double
+	// canceled, double cost, double delay, double distance) {
+	// if (flight.time == -1.0) { // TODO - does this work?
+	// return "time";
+	// }
+	// if (flight.canceled == -1.0) {
+	// return "cancelled
+	// }
+	// }
 
 	public int checkFlightsIndex(String origin, Flight dst) { // combine these
-																	// two so
+																// two so
 																// doesn't have
 																// to be
 																// duplicated
