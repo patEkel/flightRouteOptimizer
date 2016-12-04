@@ -204,7 +204,7 @@ public class NetworkGraph {
 		airports = new HashMap<String, Airport>();
 
 		Scanner s = new Scanner(f);
-		System.out.println(s.nextLine());
+		//System.out.println(s.nextLine());
 
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
@@ -213,13 +213,13 @@ public class NetworkGraph {
 														// and add to correct
 														// airport
 
-			System.out.println(currentLine.toString());
+		//	System.out.println(currentLine.toString());
 
 			origin = new Airport(currentLineArray[0]);
 			dst = new Airport(currentLineArray[1]);
 			thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]),
 					Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]),
-					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
+					Integer.parseInt(currentLineArray[6]), Integer.parseInt(currentLineArray[7]));
 
 			if (!airports.containsKey(origin.name)) {
 				airports.put(origin.name, origin); // shouldn't this be add?

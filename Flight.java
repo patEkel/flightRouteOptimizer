@@ -17,16 +17,16 @@ public class Flight {
 
 	//FlightCriteria flightCriteria;
 	
-	public Flight(Airport destination, String carrier, double delay, double canceled, double time, double distance, double cost){
+	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, int cost){
 	//public Flight(Airport destination,  int delay, int canceled, int time, int distance, double cost){
 	this.destination = destination;
 		this.carriers.add(carrier);
 		this.carrier = carrier; // add in Graph class every time, no duplicates
-		this.delay = delay;
-		this.canceled = canceled;
-		this.time = time;
-		this.distance = distance;
-		this.cost = cost;
+		this.delay = (double) delay;
+		this.canceled = (double) canceled;
+		this.time = (double) time;
+		this.distance = (double) distance;
+		this.cost = (double) cost;
 		this.count=1;
 		this.flightName = destination.name;
 	}	
