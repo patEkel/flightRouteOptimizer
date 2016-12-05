@@ -23,6 +23,7 @@ public class Flight {
 		this.time = (double) time;
 		this.distance = (double) distance;
 		this.count = 1;
+		this.cost = cost;
 		this.flightName = destination.name;
 	}
 

@@ -3,42 +3,71 @@ package assignment13;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class NetworkGraphTest {
 
-	NetworkGraph j;
+	static NetworkGraph airportGraph;
+	static NetworkGraph airportGraphSmall;
+	BestPath shortestDistancePathTest;
 
-	@Before
-	public void setUp() throws Exception {
-
-
-		 j = new NetworkGraph("smallerFlights.csv");
-
-//		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
-		System.out.println("bitch");
-
-	//	NetworkGraph ng = new NetworkGraph("smallFlights.csv");
-		System.out.println("sup");
-
-
+	@BeforeClass
+	public static void setUp() throws Exception {
+		try {
+			airportGraphSmall  = new NetworkGraph("C:/Users/pat/Desktop/smallFileTest.csv");
+			airportGraph = new NetworkGraph("C:/Users/pat/Desktop/school/Fall16/2420/assignment13/flights-2015-q3.csv");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
 	@After
 	public void tearDown() throws Exception {
 	}
-
 	@Test
-	public void test() throws FileNotFoundException {
-
-//		assertTrue(j.airports.get("SFO").flights.size()==1);
-
-//		NetworkGraph ng = new NetworkGraph("smallFlights.csv");
-
-
+	public void testLargeFileMobToAcv() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraph.getBestPath("MOB", "ACV", FlightCriteria.DISTANCE);
+		shortestDistancePathTest = new BestPath();
+		shortestDistancePathTest.path = new ArrayList<String>();
+		shortestDistancePathTest.path.add(0, "ACV");
+		shortestDistancePathTest.path.add(0, "SFO");
+		shortestDistancePathTest.path.add(0, "DFW");
+		shortestDistancePathTest.path.add(0, "MOB");
+		shortestDistancePathTest.pathLength = 2253;
+		assertTrue(shortestDistancePath.pathLength == 2253);
+		assertTrue(shortestDistancePath.equals(shortestDistancePathTest));
+		System.out.println(shortestDistancePath.toString());
 	}
-
+	@Test
+	public void testLargeFileSfoToDfw() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraph.getBestPath("SFO", "DFW", FlightCriteria.DISTANCE, "DL");
+		assertTrue(shortestDistancePath.pathLength == 1588);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileMobTPPPPPoAcv() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraph.getBestPath("MOB", "ACV", FlightCriteria.DISTANCE);
+		assertTrue(shortestDistancePath.pathLength == 2253);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileSfoToJfkCost() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.COST);
+		assertEquals(841.49, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	public void testLargeFileSfoToJfkTime() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.TIME);
+		assertEquals(201.5, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	public void testLargeFileSfoToJfkDelay() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.DELAY);
+		assertEquals(18.6, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
 }
