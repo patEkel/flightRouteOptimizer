@@ -162,14 +162,13 @@ public class NetworkGraph {
 
 	public void checkNeighbors(Flight f, Airport currentAirport, String crit, PriorityQueue<Airport> pq) {
 		if (!airports.get(f.destination.name).wasVisited) {
-			if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest
-					+ this.getWeightValue(f, crit))) {
-				pq.remove(airports.get(f.destination.name));
-				airports.get(f.destination.name).currentBest = currentAirport.currentBest
-						+ this.getWeightValue(f, crit);
-				pq.add(airports.get(f.destination.name));
-				airports.get(f.destination.name).cameFrom = currentAirport;
-
+			if (this.getWeightValue(f, crit) >= 0) {  // make sure weight is not negative for given criteria
+				if (airports.get(f.destination.name).currentBest > (currentAirport.currentBest + this.getWeightValue(f, crit))) {
+					pq.remove(airports.get(f.destination.name));
+					airports.get(f.destination.name).currentBest = currentAirport.currentBest + this.getWeightValue(f, crit);
+					pq.add(airports.get(f.destination.name));
+					airports.get(f.destination.name).cameFrom = currentAirport;
+				}
 			}
 		}
 	}
@@ -260,23 +259,11 @@ public class NetworkGraph {
 	}
 
 	public void averageValues(Flight tempFlight, Flight thisFlight) {
-		if (thisFlight.canceled != -1.0) {
-			tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)
-					/ (tempFlight.count + 1.0));
-		}
-		if (thisFlight.time != -1.0) {
+			tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)	/ (tempFlight.count + 1.0));
 			tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1.0));
-		}
-		if (thisFlight.cost != -1.0) {
 			tempFlight.cost = (((tempFlight.cost * tempFlight.count) + thisFlight.cost) / (tempFlight.count + 1.0));
-		}
-		if (thisFlight.delay != -1.0) {
 			tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1.0));
-		}
-		if (thisFlight.distance != -1.0) {
-			tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)
-					/ (tempFlight.count + 1.0));
-		}
+			tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)	/ (tempFlight.count + 1.0));
 	}
 
 	public int checkFlightsIndex(String origin, Flight dst) {

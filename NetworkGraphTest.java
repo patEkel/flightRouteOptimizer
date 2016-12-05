@@ -19,8 +19,8 @@ public class NetworkGraphTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		try {
-			airportGraphSmall  = new NetworkGraph("C:/Users/pat/Desktop/smallFileTest.csv");
-			airportGraph = new NetworkGraph("C:/Users/pat/Desktop/school/Fall16/2420/assignment13/flights-2015-q3.csv");
+			airportGraphSmall  = new NetworkGraph("C:/Users/pat/school/Fall16/2420/assignment13/smallFileTest.csv");
+			airportGraph = new NetworkGraph("C:/Users/pat/school/Fall16/2420/assignment13/flights-2015-q3.csv");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
