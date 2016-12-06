@@ -2,6 +2,11 @@ package assignment13;
 
 import java.util.HashSet;
 
+/**
+ * Class which represents flights (edges) on the graph
+ * @author Patrick Ekel and Kyle Price
+ *
+ */
 public class Flight {
 	Airport destination;
 	String carrier;
@@ -13,7 +18,17 @@ public class Flight {
 	int count = 0;
 	String flightName;
 	HashSet<String> carriers = new HashSet<String>();
-
+	
+	/**
+	 * Constructor for a flight, sets member varibales to arguments
+	 * @param destination - destination airport
+	 * @param carrier - carrier serving flight
+	 * @param delay - value for delay
+	 * @param canceled - value for canceled
+	 * @param time - value for time
+	 * @param distance - value for distance
+	 * @param cost - value for cost
+	 */
 	public Flight(Airport destination, String carrier, int delay, int canceled, int time, int distance, double cost) {
 		this.destination = destination;
 		this.carriers.add(carrier);

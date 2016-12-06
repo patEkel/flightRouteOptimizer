@@ -32,18 +32,18 @@ import java.util.Scanner;
  * </p>
  * 
  * @author CS2420 Teaching Staff - Spring 2016
+ * 	Addition code added by Kyle Price and Patrick Ekel
  */
 public class NetworkGraph {
-	String flightInfoPath;
 	NetworkGraph g;
+	String flightInfoPath;
 	HashMap<String, Airport> airports;
-	int tempI;
-	double weight;
-	int currentSize = 0; // delete???
 	ArrayList<Airport> totalAirports;
 	BestPath bestPath;
-	boolean airlineGiven;
 	String airline;
+	double weight;
+	int currentSize = 0;
+	boolean airlineGiven;
 
 	/**
 	 * <p>
@@ -109,45 +109,45 @@ public class NetworkGraph {
 		bestPath.path = new ArrayList<String>();
 		Airport currentAirport = airports.get(origin);
 
+		// check if null String is passed
 		if (origin == null || destination == null) {
 			bestPath.pathLength = 0;
 			return bestPath;
 		}
+		// check if Graph contains the given airports
 		if (!airports.containsKey(origin) || !airports.containsKey(destination)) {
 			bestPath.pathLength = 0;
 			return bestPath;
 		}
+		// Dijkstra's shortest path algortihm
 		String crit = getWeightType(criteria);
 		AirportComparator comp = new AirportComparator();
 		PriorityQueue<Airport> pq = new PriorityQueue<Airport>(350, comp);
 
 		pq.add(airports.get(origin));
 		airports.get(origin).currentBest = 0;
-
 		while (!pq.isEmpty()) {
 			currentAirport = pq.poll();
-
 			if (currentAirport.name.equals(destination)) {
 				break;
 			}
 			airports.get(currentAirport.name).wasVisited = true;
-			currentAirport.wasVisited = true;
-
 			for (Flight f : currentAirport.flights) {
 				if (airlineGiven) {
 					if (f.carriers.contains(airline)) {
 						this.checkNeighbors(f, currentAirport, crit, pq);
 					}
-
 				} else {
 					this.checkNeighbors(f, currentAirport, crit, pq);
 				}
 			}
 		}
+		// check if destination was never found
 		if (!currentAirport.name.equals(destination)) {
 			bestPath.pathLength = 0;
 			return bestPath;
 		}
+		// was back from destination to origin
 		bestPath.pathLength = currentAirport.currentBest;
 		while (currentAirport.cameFrom != null) {
 			bestPath.path.add(0, currentAirport.name);
@@ -159,7 +159,13 @@ public class NetworkGraph {
 		airline = null;
 		return bestPath;
 	}
-
+	/**
+	 * Helper method which determines if the cost of getting to an airport is less than the current smallest cost.
+	 * @param f - given flight
+	 * @param currentAirport - current airport
+	 * @param crit - criteria being used for cost
+	 * @param pq priority queue
+	 */
 	public void checkNeighbors(Flight f, Airport currentAirport, String crit, PriorityQueue<Airport> pq) {
 		if (!airports.get(f.destination.name).wasVisited) {
 			if (this.getWeightValue(f, crit) >= 0) {  // make sure weight is not negative for given criteria
@@ -172,7 +178,9 @@ public class NetworkGraph {
 			}
 		}
 	}
-
+	/**
+	 * Resets Graph properties
+	 */
 	public void resetGraph() {
 		for (Airport a : totalAirports) {
 			a.cameFrom = null;
@@ -212,7 +220,11 @@ public class NetworkGraph {
 		airline = airliner;
 		return getBestPath(origin, destination, criteria);
 	}
-
+	/**
+	 * Helper method which sets up the graph based on a given file path
+	 * @param flightInfo - the file path
+	 * @throws FileNotFoundException - thrown if given file is not found
+	 */
 	public void populate(String flightInfo) throws FileNotFoundException {
 		File f = new File(flightInfo);
 		String currentLine;
@@ -223,7 +235,7 @@ public class NetworkGraph {
 		airports = new HashMap<String, Airport>();
 		Scanner s = new Scanner(f);
 		currentLine = s.nextLine();
-
+		// read file line by line, parsing values to correct data type
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
 			currentLineArray = currentLine.split(","); // check ENUMS somewhere and add to correct airport
@@ -233,11 +245,12 @@ public class NetworkGraph {
 			thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]),
 					Integer.parseInt(currentLineArray[4]), Integer.parseInt(currentLineArray[5]),
 					Integer.parseInt(currentLineArray[6]), Double.parseDouble(currentLineArray[7]));
-
+			// determine if graph does not compare a given origin
 			if (!airports.containsKey(origin.name)) {
 				airports.put(origin.name, origin);
 				totalAirports.add(origin);
 			}
+			// determine if graph does not contain a given destination
 			if (!airports.containsKey(dst.name)) {
 				airports.put(dst.name, dst);
 				totalAirports.add(dst);
@@ -253,11 +266,16 @@ public class NetworkGraph {
 				tempFlight.count++;
 
 			} else {
+				// the flight is new, add it to graph
 				(airports.get(origin.name)).flights.add(thisFlight);
 			}
 		}
 	}
-
+	/**
+	 * Helper method for averaging values for a particular flight
+	 * @param tempFlight - the flight already in graph
+	 * @param thisFlight - the new flight with values to be averaged into existing
+	 */
 	public void averageValues(Flight tempFlight, Flight thisFlight) {
 			tempFlight.canceled = (((tempFlight.canceled * tempFlight.count) + thisFlight.canceled)	/ (tempFlight.count + 1.0));
 			tempFlight.time = (((tempFlight.time * tempFlight.count) + thisFlight.time) / (tempFlight.count + 1.0));
@@ -265,7 +283,12 @@ public class NetworkGraph {
 			tempFlight.delay = (((tempFlight.delay * tempFlight.count) + thisFlight.delay) / (tempFlight.count + 1.0));
 			tempFlight.distance = (((tempFlight.distance * tempFlight.count) + thisFlight.distance)	/ (tempFlight.count + 1.0));
 	}
-
+	/**
+	 * Helper for getting index of flight if it is already in graph
+	 * @param origin - origin of flight
+	 * @param dst - destination of flight
+	 * @return index if flight exists, -1 otherwise
+	 */
 	public int checkFlightsIndex(String origin, Flight dst) {
 		for (int i = 0; i < airports.get(origin).flights.size(); i++) {
 			if (airports.get(origin).flights.get(i).flightName.equals(dst.flightName)) {
@@ -274,7 +297,11 @@ public class NetworkGraph {
 		}
 		return -1;
 	}
-
+	/**
+	 * Helper for getting criteria used
+	 * @param criteria - criteria given
+	 * @return name of criteria as String
+	 */
 	public String getWeightType(FlightCriteria criteria) {
 		switch (criteria) {
 		case DELAY:
@@ -289,7 +316,12 @@ public class NetworkGraph {
 			return "time";
 		}
 	}
-
+	/**
+	 * Helper for getting criteria as double
+	 * @param flight - given flight
+	 * @param criteria - criteria given
+	 * @return value of particular flight's criteria
+	 */
 	public double getWeightValue(Flight flight, String criteria) {
 		switch (criteria) {
 		case "delay":

@@ -10,13 +10,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/**
+ * Test class for the NetworkGraph class
+ * @author Patrick Ekel and Kyle Price
+ *
+ */
 public class NetworkGraphTest {
 
 	static NetworkGraph airportGraph;
 	static NetworkGraph airportGraphSmall;
 	BestPath shortestDistancePathTest;
 
-	@BeforeClass
+	@BeforeClass // instantiates graph for tests with given file path
 	public static void setUp() throws Exception {
 		try {
 			airportGraphSmall  = new NetworkGraph("C:/Users/pat/school/Fall16/2420/assignment13/smallFileTest.csv");
@@ -24,9 +29,6 @@ public class NetworkGraphTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	@After
-	public void tearDown() throws Exception {
 	}
 	@Test
 	public void testLargeFileMobToAcv() throws FileNotFoundException {
@@ -82,6 +84,18 @@ public class NetworkGraphTest {
 	public void testLargeFileSfoFromNonExistingDelay() throws FileNotFoundException {
 		BestPath shortestDistancePath = airportGraphSmall.getBestPath("GFO", "JFK", FlightCriteria.DELAY);
 		assertEquals(0, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileSfoFromNonExistingDelayNoAirliner() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.DELAY,"DL" );
+		assertEquals(0, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileSfoFromNonExistingDelayWithAirliner() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.TIME,"AA" );
+		assertEquals(604.5, shortestDistancePath.pathLength, .01);
 		System.out.println(shortestDistancePath.toString());
 	}
 }
