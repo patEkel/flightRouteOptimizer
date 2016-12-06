@@ -60,14 +60,28 @@ public class NetworkGraphTest {
 		assertEquals(841.49, shortestDistancePath.pathLength, .01);
 		System.out.println(shortestDistancePath.toString());
 	}
+	@Test
 	public void testLargeFileSfoToJfkTime() throws FileNotFoundException {
 		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.TIME);
-		assertEquals(201.5, shortestDistancePath.pathLength, .01);
+		assertEquals(604.5, shortestDistancePath.pathLength, .01);
 		System.out.println(shortestDistancePath.toString());
 	}
+	@Test
 	public void testLargeFileSfoToJfkDelay() throws FileNotFoundException {
 		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "JFK", FlightCriteria.DELAY);
-		assertEquals(18.6, shortestDistancePath.pathLength, .01);
+		assertEquals(56, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileSfoToNonExistingDelay() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("SFO", "PFK", FlightCriteria.DELAY);
+		assertEquals(0, shortestDistancePath.pathLength, .01);
+		System.out.println(shortestDistancePath.toString());
+	}
+	@Test
+	public void testLargeFileSfoFromNonExistingDelay() throws FileNotFoundException {
+		BestPath shortestDistancePath = airportGraphSmall.getBestPath("GFO", "JFK", FlightCriteria.DELAY);
+		assertEquals(0, shortestDistancePath.pathLength, .01);
 		System.out.println(shortestDistancePath.toString());
 	}
 }
