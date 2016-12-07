@@ -5,7 +5,7 @@ import java.util.HashSet;
 /**
  * Class which represents flights (edges) on the graph
  * @author Patrick Ekel and Kyle Price
- *
+ * 12/6/2016
  */
 public class Flight {
 	Airport destination;
@@ -41,5 +41,4 @@ public class Flight {
 		this.cost = cost;
 		this.flightName = destination.name;
 	}
-
 }

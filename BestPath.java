@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * course but don't change names etc.)
  * 
  * @author CS2420 Teaching Staff - Spring 2016
+ * Kyle Price and Patrick Ekel 
+ * 12/6/2016
  */
 public class BestPath {
 	

@@ -31,8 +31,8 @@ import java.util.Scanner;
  * to completed the task at hand
  * </p>
  * 
- * @author CS2420 Teaching Staff - Spring 2016
- * 	Addition code added by Kyle Price and Patrick Ekel
+ * @author Kyle Price and Patrick Ekel
+ * 12/6/2016
  */
 public class NetworkGraph {
 	NetworkGraph g;
@@ -61,12 +61,9 @@ public class NetworkGraph {
 	 * an average or a probability (value between 0-1 inclusive).
 	 * </p>
 	 * 
-	 * @param flightInfoPath
-	 *            - The path to the file containing flight data. This should be
-	 *            a *.csv(comma separated value) file
+	 * @param flightInfoPath - The path to the file containing flight data. This should be a *.csv(comma separated value) file
 	 * 
-	 * @throws FileNotFoundException
-	 *             The only exception that can be thrown in this assignment and
+	 * @throws FileNotFoundException - The only exception that can be thrown in this assignment and
 	 *             only if a file is not found.
 	 */
 	public NetworkGraph(String flightInfoPath) throws FileNotFoundException {
@@ -89,16 +86,13 @@ public class NetworkGraph {
 	 * (not a <code>null</code> path). If origin or destination are
 	 * <code>null</code>, also return a BestPath object with no path.
 	 * 
-	 * @param origin
-	 *            - The starting location to find a path from. This should be a
+	 * @param origin - The starting location to find a path from. This should be a
 	 *            3 character long string denoting an airport.
 	 * 
-	 * @param destination
-	 *            - The destination location from the starting airport. Again,
+	 * @param destination - The destination location from the starting airport. Again,
 	 *            this should be a 3 character long string denoting an airport.
 	 * 
-	 * @param criteria
-	 *            - This enum dictates the definition of "best". Based on this
+	 * @param criteria - This enum dictates the definition of "best". Based on this
 	 *            value a path should be generated and return.
 	 * 
 	 * @return - An object containing path information including origin,
@@ -112,11 +106,17 @@ public class NetworkGraph {
 		// check if null String is passed
 		if (origin == null || destination == null) {
 			bestPath.pathLength = 0;
+			airlineGiven = false;
+			airline = null;
+			this.resetGraph();
 			return bestPath;
 		}
 		// check if Graph contains the given airports
 		if (!airports.containsKey(origin) || !airports.containsKey(destination)) {
 			bestPath.pathLength = 0;
+			airlineGiven = false;
+			airline = null;
+			this.resetGraph();
 			return bestPath;
 		}
 		// Dijkstra's shortest path algortihm
@@ -132,6 +132,7 @@ public class NetworkGraph {
 				break;
 			}
 			airports.get(currentAirport.name).wasVisited = true;
+			currentAirport.wasVisited = true;
 			for (Flight f : currentAirport.flights) {
 				if (airlineGiven) {
 					if (f.carriers.contains(airline)) {
@@ -145,6 +146,9 @@ public class NetworkGraph {
 		// check if destination was never found
 		if (!currentAirport.name.equals(destination)) {
 			bestPath.pathLength = 0;
+			this.resetGraph();
+			airlineGiven = false;
+			airline = null;
 			return bestPath;
 		}
 		// was back from destination to origin
@@ -195,20 +199,16 @@ public class NetworkGraph {
 	 * looking for paths skip the ones that don't match the given airliner.
 	 * </p>
 	 * 
-	 * @param origin
-	 *            - The starting location to find a path from. This should be a
+	 * @param origin - The starting location to find a path from. This should be a
 	 *            3 character long string denoting an airport.
 	 * 
-	 * @param destination
-	 *            - The destination location from the starting airport. Again,
+	 * @param destination - The destination location from the starting airport. Again,
 	 *            this should be a 3 character long string denoting an airport.
 	 * 
-	 * @param criteria
-	 *            - This enum dictates the definition of "best". Based on this
+	 * @param criteria - This enum dictates the definition of "best". Based on this
 	 *            value a path should be generated and return.
 	 * 
-	 * @param airliner
-	 *            - a string dictating the airliner the user wants to use
+	 * @param airliner - a string dictating the airliner the user wants to use
 	 *            exclusively. Meaning no flights from other airliners will be
 	 *            considered.
 	 * 
@@ -225,6 +225,7 @@ public class NetworkGraph {
 	 * @param flightInfo - the file path
 	 * @throws FileNotFoundException - thrown if given file is not found
 	 */
+	@SuppressWarnings("resource")
 	public void populate(String flightInfo) throws FileNotFoundException {
 		File f = new File(flightInfo);
 		String currentLine;
@@ -239,7 +240,6 @@ public class NetworkGraph {
 		while (s.hasNextLine()) {
 			currentLine = s.nextLine();
 			currentLineArray = currentLine.split(","); // check ENUMS somewhere and add to correct airport
-
 			origin = new Airport(currentLineArray[0]);
 			dst = new Airport(currentLineArray[1]);
 			thisFlight = new Flight(dst, currentLineArray[2], Integer.parseInt(currentLineArray[3]),
@@ -258,13 +258,11 @@ public class NetworkGraph {
 			// check if origin -> destination already exits.
 			int flightIndex = checkFlightsIndex(origin.name, thisFlight);
 			if (flightIndex >= 0) {
-
 				// if flight exists, add value of new flight so values can be averaged.
 				Flight tempFlight = airports.get(origin.name).flights.get(flightIndex);
 				tempFlight.carriers.add(thisFlight.carrier);
 				this.averageValues(tempFlight, thisFlight);
 				tempFlight.count++;
-
 			} else {
 				// the flight is new, add it to graph
 				(airports.get(origin.name)).flights.add(thisFlight);

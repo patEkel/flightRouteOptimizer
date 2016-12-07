@@ -3,9 +3,9 @@ package assignment13;
 import java.util.ArrayList;
 
 /**
- * Class which represents airports (verticies) on graph
+ * Class which represents airports (vertices) on graph
  * @author Patrick Ekel and Kyle Price
- *
+ * 12/6/2016
  */
 public class Airport {
 	String name;
